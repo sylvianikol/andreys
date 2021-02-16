@@ -1,5 +1,6 @@
 package com.exam.andreys.web;
 
+import com.exam.andreys.model.binding.UserLoginBindingModel;
 import com.exam.andreys.model.binding.UserRegisterBindingModel;
 import com.exam.andreys.model.service.UserServiceModel;
 import com.exam.andreys.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -62,13 +64,43 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        if (!model.containsAttribute("userLoginBindingModel")) {
+            model.addAttribute("userLoginBindingModel", new UserLoginBindingModel());
+            model.addAttribute("notFound", false);
+        }
         return "login";
     }
 
     @PostMapping("/login")
-    public String loginConfirm() {
+    public String loginConfirm(@Valid UserLoginBindingModel userLoginBindingModel,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes,
+                               HttpSession httpSession) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.userLoginBindingModel",
+                    bindingResult
+            );
 
+            return "redirect:login";
+        }
+
+        UserServiceModel userServiceModel = this.userService.findByUsernameAndPassword(
+                userLoginBindingModel.getUsername(),
+                userLoginBindingModel.getPassword());
+
+        if (userServiceModel == null) {
+            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+            redirectAttributes.addFlashAttribute("notFound", true);
+
+            return "redirect:login";
+        }
+
+        httpSession.setAttribute("user", userServiceModel);
+
+        return "redirect:/";
     }
 
     private boolean passwordsMatch(UserRegisterBindingModel userRegisterBindingModel) {
