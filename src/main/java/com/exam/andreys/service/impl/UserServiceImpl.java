@@ -1,5 +1,7 @@
 package com.exam.andreys.service.impl;
 
+import com.exam.andreys.model.entity.User;
+import com.exam.andreys.model.service.UserServiceModel;
 import com.exam.andreys.repository.UserRepository;
 import com.exam.andreys.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -16,5 +18,16 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public boolean register(UserServiceModel userServiceModel) {
+        try {
+            this.userRepository.save(this.modelMapper.map(userServiceModel, User.class));
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }
