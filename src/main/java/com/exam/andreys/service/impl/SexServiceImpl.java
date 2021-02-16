@@ -34,4 +34,9 @@ public class SexServiceImpl implements SexService {
                     });
         }
     }
+
+    @Override
+    public Sex findBySex(SexType sex) {
+        return this.sexRepository.findBySex(sex).orElse(null);
+    }
 }

@@ -6,48 +6,56 @@
         <nav th:replace="fragments/fragment :: nav"></nav>
     </header>
     <main>
-        <h1 class="text-center mt-2"><span class="badge badge-pill badge-dark">Add Product</span></h1>
+        <h1 class="text-center mt-2">
+            <span class="badge badge-pill badge-dark">Add Product</span></h1>
         <hr class="hr-3"/>
-        <form class="mx-auto w-25 bg-blur">
+        <form class="mx-auto w-25 bg-blur" th:object="${productAddBindingModel}"
+              method="POST" action="/products/add">
             <div class="form-group">
+                <h5 th:if="${exists}" class="bg-danger rounded">Product already exists</h5>
                 <div class="text-white label-holder d-flex justify-content-center">
                     <label for="name" class="h4 mb-2">Name</label>
                 </div>
-                <input type="text" class="form-control" id="name" name="name"/>
+                <input th:field="*{name}" th:errorclass="bg-danger" type="text" class="form-control" id="name" name="name"/>
+                <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"> Name error</small>
             </div>
             <div class="form-group">
                 <div class="text-white label-holder d-flex justify-content-center">
                     <label for="description" class="h4 mb-2">Description</label>
                 </div>
-                <input type="text" class="form-control" id="description" name="description"/>
+                <input th:field="*{description}" th:errorclass="bg-danger" type="text" class="form-control" id="description" name="description"/>
+                <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger">Description error message</small>
             </div>
             <div class="form-group">
                 <div class="text-white label-holder d-flex justify-content-center">
                     <label for="category" class="h4 mb-2">Category</label>
                 </div>
-                <select styleClass="browser-default custom-select" id="category"
-                                 value="#{productCreateBean.productCreateModel.category}">
-                    <option value="SHIRT">Shirt</option>
-                    <option value="DENIM">Denim</option>
-                    <option value="SHORTS">Shorts</option>
-                    <option value="JACKET">Jacket</option>
+                <select th:field="*{category}" th:errorclass="bg-danger"
+                        class="browser-default custom-select" id="category" name="category">
+                    <option value="">Select category</option>
+                    <option th:each="c : ${T(com.exam.andreys.model.enums.CategoryName).values()}"
+                            th:text="${c}" th:value="${c}">Category Name</option>
                 </select>
+                <small th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="text-danger">Category error message</small>
             </div>
             <div class="form-group">
                 <div class="text-white label-holder d-flex justify-content-center">
                     <label for="sex" class="h4 mb-2">Sex</label>
                 </div>
-                <select styleClass="browser-default custom-select" id="sex"
-                                 value="#{productCreateBean.productCreateModel.sex}">
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
+                <select th:field="*{sex}" th:errorclass="bg-danger"
+                        class="browser-default custom-select" id="sex" name="sex">
+                    <option value="">Select sex</option>
+                    <option th:each="s : ${T(com.exam.andreys.model.enums.SexType).values()}"
+                            th:text="${s}" th:value="${s}">Sex Type</option>
                 </select>
+                <small th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}" class="text-danger">Sex error message</small>
             </div>
             <div class="form-group">
                 <div class="text-white label-holder d-flex justify-content-center">
                     <label for="price" class="h4 mb-2">Price</label>
                 </div>
-                <input type="number" class="form-control" id="price" name="price"/>
+                <input th:field="*{price}" th:errorclass="bg-danger" type="number" class="form-control" id="price" name="price"/>
+                <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">Price error message</small>
             </div>
             <div class="button-holder d-flex justify-content-center">
                 <button type="submit" class="btn btn-secondary text-white mb-3">Add Product</button>
