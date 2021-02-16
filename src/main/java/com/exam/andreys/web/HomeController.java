@@ -10,7 +10,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(HttpSession httpSession) {
+        if (httpSession.getAttribute("user") == null) {
+            return "index";
+        }
 
-        return "index";
+        return "home";
     }
 }
