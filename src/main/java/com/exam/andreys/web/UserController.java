@@ -103,6 +103,12 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        httpSession.invalidate();
+        return "redirect:/";
+    }
+
     private boolean passwordsMatch(UserRegisterBindingModel userRegisterBindingModel) {
         return userRegisterBindingModel.getPassword()
                 .equals(userRegisterBindingModel.getConfirmPassword());
