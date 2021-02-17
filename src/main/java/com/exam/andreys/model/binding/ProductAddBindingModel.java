@@ -3,6 +3,7 @@ package com.exam.andreys.model.binding;
 import com.exam.andreys.model.enums.CategoryName;
 import com.exam.andreys.model.enums.SexType;
 
+import javax.persistence.Column;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ public class ProductAddBindingModel {
 
     private String name;
     private String description;
+    private String imageUrl;
     private CategoryName category;
     private SexType sex;
     private BigDecimal price;
@@ -38,6 +40,15 @@ public class ProductAddBindingModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @NotBlank(message = "Image url cannot be null or empty")
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @NotNull(message = "Category cannot be null.")

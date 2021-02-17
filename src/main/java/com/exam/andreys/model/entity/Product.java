@@ -14,6 +14,7 @@ public class Product extends BaseEntity {
 
     private String name;
     private String description;
+    private String imageUrl;
     private BigDecimal price;
     private Category category;
     private Sex sex;
@@ -36,6 +37,15 @@ public class Product extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "image_url", nullable = false)
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @ColumnDefault("0")
