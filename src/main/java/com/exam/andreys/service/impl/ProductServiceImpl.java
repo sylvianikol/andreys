@@ -10,6 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -38,5 +42,26 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return true;
+    }
+
+    @Override
+    public List<ProductServiceModel> getAllProducts() {
+        return this.productRepository.findAll().stream()
+                .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public ProductServiceModel getByName(String name) {
+        return this.productRepository.findByName(name)
+                .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteByName(String name) {
+        this.productRepository.findByName(name)
+                .ifPresent(this.productRepository::delete);
+
     }
 }

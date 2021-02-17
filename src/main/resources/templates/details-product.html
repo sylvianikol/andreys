@@ -10,16 +10,18 @@
         <hr class="my-3"/>
         <div class="container-fluid bg-blur w-50">
             <div class="row justify-content-center">
-                <form class="w-50 justify-content-center">
+                <form class="w-50 justify-content-center"
+                      th:object="${product}" method="POST"
+                      th:action="@{/products/details/{name}(name = *{name})}">
                     <div class="label mt-2">
-                        <h2 class="text-white text-center">Buzzer</h2>
+                        <h2 class="text-white text-center" th:text="${name}">Product Name</h2>
                     </div>
                     <div class="label mt-4">
-                        <img library="img" src="/img/MALE-SHIRT.jpg" class="img-thumbnail" width="200" height="200"/>
-                        <h3 class="text-white text-center">80% silk</h3>
+                        <img th:src="*{imageUrl}" th:alt="*{name}" class="img-thumbnail" width="200" height="200"/>
+                        <h3 class="text-white text-center" th:text="*{description}">Product Description</h3>
                     </div>
                     <div class="label mt-4">
-                        <h3 class="text-white text-center mb-3">65.00</h3>
+                        <h3 class="text-white text-center mb-3" th:text="*{price}">Product Price</h3>
                     </div>
                     <div class="button-holder d-flex justify-content-center">
                         <button type="submit" class="btn btn-danger text-white mb-3">Delete Product</button>
